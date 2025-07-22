@@ -59,9 +59,25 @@ const deleteShoes = async (req, res) => {
   }
 };
 
+const getShoesById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const shoes = await prisma.shoes.findUnique({
+      where: { id }
+    });
+    if (!shoes) {
+      return res.status(404).json({ error: 'Shoe not found' });
+    }
+    res.status(200).json(shoes);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   createShoes,
   getAllShoes,
   updateShoes,
-  deleteShoes
+  deleteShoes,
+  getShoesById
 };
